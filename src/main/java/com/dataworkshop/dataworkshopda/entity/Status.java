@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dataworkshop.entities;
+package com.dataworkshop.dataworkshopda.entity;
 
 /**
  * @author ramon

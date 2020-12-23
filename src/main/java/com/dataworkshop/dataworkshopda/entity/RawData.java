@@ -1,10 +1,11 @@
 /**
  * 
  */
-package com.dataworkshop.entities;
+package com.dataworkshop.dataworkshopda.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,22 +28,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "TBL_RAW_DATA")
-public class DataRaw {
+public class RawData {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(unique = true)
 	private String name;
 	private String description;
 	private long userId;
 	@Lob
 	@Type(type="org.hibernate.type.BinaryType")
 	private Byte[] data;
-	private Date date;
+	private LocalDateTime date;
 	@Enumerated(EnumType.STRING)
 	private Status state;
 	
-	public DataRaw(String name, String description, Byte[] data, Date date, Status state) {
+	public RawData(String name, String description, Byte[] data, LocalDateTime date, Status state) {
 		super();
 		this.name = name;
 		this.description = description;
