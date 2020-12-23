@@ -50,8 +50,4 @@ If you want to learn more about building native executables, please consult http
 
 Guide: https://quarkus.io/guides/rest-json
 
-# VS-CODE debug
-
-Extension Quarkus and its dependencies
-CTRL+P -> >Quarkus: Debug current ....
 
