@@ -36,6 +36,7 @@ public class RawData {
 	@Column(unique = true)
 	private String name;
 	private String description;
+	@Column(name = "user_id")
 	private long userId;
 	@Lob
 	@Type(type="org.hibernate.type.BinaryType")
