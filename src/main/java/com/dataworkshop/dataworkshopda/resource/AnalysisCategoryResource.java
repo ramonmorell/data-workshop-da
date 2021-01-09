@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.dataworkshop.dataworkshopda.dto.AnalysisCategoryDto;
 import com.dataworkshop.dataworkshopda.entity.AnalysisCategory;
 
 /**
@@ -35,10 +36,10 @@ public interface AnalysisCategoryResource {
 	public Response getCategory(@PathParam("id") long id);
 	
 	@POST
-	public Response setCategory(AnalysisCategory category);
+	public Response setCategory(AnalysisCategoryDto category);
 	
 	@PUT
-	public Response updateCategory(AnalysisCategory category);
+	public Response updateCategory(AnalysisCategoryDto category);
 	
 	@DELETE
 	@Path("/{id}")

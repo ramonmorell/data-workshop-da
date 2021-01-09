@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 import com.dataworkshop.dataworkshopda.dto.AnalysisCategoryDto;
 import com.dataworkshop.dataworkshopda.entity.AnalysisCategory;
+import com.dataworkshop.dataworkshopda.mapper.AnalysisCategoryMapper;
 import com.dataworkshop.dataworkshopda.service.AnalysisCategoryService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,25 +30,13 @@ public class AnalysisCategoryResourceImpl implements AnalysisCategoryResource {
 
 	@Inject
 	AnalysisCategoryService analysisCategoryService;
-	
-	private AnalysisCategoryDto mapCategory(AnalysisCategory analysisCategoryEntity) {
-		AnalysisCategoryDto res = new AnalysisCategoryDto();
-		res.setId(analysisCategoryEntity.getId());
-		res.setName(analysisCategoryEntity.getName());
-		res.setDesciption(analysisCategoryEntity.getDesciption());
-		AnalysisCategory parentCategory = analysisCategoryEntity.getParentCategory();
-		if(parentCategory != null) {
-			res.setParentCategoryId(parentCategory.getId());
-		}
-		return res;
-	}
 
 	@Override
 	public Response listCategories() {
 		log.info("AnalysisCategoryResourceImpl >> listCategories()");
 		List<AnalysisCategoryDto> res = new ArrayList<AnalysisCategoryDto>();
 		try {
-			res = analysisCategoryService.listCategories().stream().map(category -> mapCategory(category)).collect(Collectors.toList());
+			res = analysisCategoryService.listCategories().stream().map(category -> AnalysisCategoryMapper.toDto(category)).collect(Collectors.toList());
 			log.info("AnalysisCategoryResourceImpl >> listCategories() >> {}", res);
 		} catch (Exception e) {
 			log.error("AnalysisCategoryResourceImpl >> listCategories() : " + e.getMessage());
@@ -73,11 +62,14 @@ public class AnalysisCategoryResourceImpl implements AnalysisCategoryResource {
 	}
 
 	@Override
-	public Response setCategory(AnalysisCategory category) {
+	public Response setCategory(AnalysisCategoryDto category) {
 		log.info("AnalysisCategoryResourceImpl >> setCategory() >> data input: {}", category);
 		AnalysisCategory res = new AnalysisCategory();
 		try {
-			res = analysisCategoryService.setCategory(category);
+			AnalysisCategory categoryEntity = AnalysisCategoryMapper.toEntity(category);
+			AnalysisCategory parentCategory = analysisCategoryService.getCategory(category.getParentCategoryId());
+			categoryEntity.setParentCategory(parentCategory);
+			res = analysisCategoryService.setCategory(categoryEntity);
 			log.info("AnalysisCategoryResourceImpl >> setCategory() >> {}", res);
 		} catch (PersistenceException e) {
 			log.error("AnalysisCategoryResourceImpl >> setCategory() : " + e.getMessage());
@@ -90,11 +82,14 @@ public class AnalysisCategoryResourceImpl implements AnalysisCategoryResource {
 	}
 
 	@Override
-	public Response updateCategory(AnalysisCategory category) {
+	public Response updateCategory(AnalysisCategoryDto category) {
 		log.info("AnalysisCategoryResourceImpl >> updateCategory() >> data input: {}", category);
 		AnalysisCategory res = new AnalysisCategory();
 		try {
-			res = analysisCategoryService.updateCategory(category);
+			AnalysisCategory categoryEntity = AnalysisCategoryMapper.toEntity(category);
+			AnalysisCategory parentCategory = analysisCategoryService.getCategory(category.getId());
+			categoryEntity.setParentCategory(parentCategory);
+			res = analysisCategoryService.updateCategory(categoryEntity);
 			log.info("AnalysisCategoryResourceImpl >> updateCategory() >> {}", res);
 		} catch (NotFoundException e) {
 			log.error("AnalysisCategoryResourceImpl >> updateCategory() : " + e.getMessage());
